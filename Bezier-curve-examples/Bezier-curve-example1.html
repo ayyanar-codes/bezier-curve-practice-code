@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Point Bezier Curve</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>3-Point Bezier Curve</h1>
+    <canvas id="bezierCanvas" width="500" height="500"></canvas>
+    <script>
+        function drawBezierCurve(ctx, P1, P2, P3) {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(P1.x, P1.y);
+            
+            for (let t = 0; t <= 1; t += 0.01) {
+                let x = (1 - t) * (1 - t) * P1.x + 2 * (1 - t) * t * P2.x + t * t * P3.x;
+                let y = (1 - t) * (1 - t) * P1.y + 2 * (1 - t) * t * P2.y + t * t * P3.y;
+                ctx.lineTo(x, y);
+            }
+
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Draw control points and lines
+            ctx.beginPath();
+            ctx.arc(P1.x, P1.y, 5, 0, 2 * Math.PI);
+            ctx.arc(P2.x, P2.y, 5, 0, 2 * Math.PI);
+            ctx.arc(P3.x, P3.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(P1.x, P1.y);
+            ctx.lineTo(P2.x, P2.y);
+            ctx.lineTo(P3.x, P3.y);
+            ctx.strokeStyle = 'gray';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        window.onload = function() {
+            const canvas = document.getElementById('bezierCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const P1 = { x: 50, y: 400 };
+            const P2 = { x: 250, y: 50 };
+            const P3 = { x: 450, y: 400 };
+            
+            drawBezierCurve(ctx, P1, P2, P3);
+        }
+    </script>
+</body>
+</html>
